@@ -796,7 +796,10 @@ function download_artifact(
     # Ensure that we're ready to download things
     probe_platform_engines!()
 
-    if permissions_blind_filesystem(first(artifacts_dirs()))
+    # Ensure the `artifacts` directory exists in our default depot
+    artifacts_dir = first(artifacts_dirs())
+    mkpath(artifacts_dir)
+    if permissions_blind_filesystem(artifacts_dir)
         # The destination directory we're hoping to fill:
         dest_dir = artifact_path(tree_hash; honor_overrides=false)
 
